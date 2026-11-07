@@ -1,0 +1,448 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>Wardrobe Ledger · Dusty Chronicle</title>
+<style>
+:root{--bg:#10141c;--panel:#191f2b;--panel2:#222b39;--line:#323d4e;--gold:#d5bb83;--text:#f0ecdf;--muted:#b0b7c5;--sage:#8ebda0;--blue:#9eb9d8;--danger:#e3a2a2;--shade:#111720;--radius:15px}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 45% -180px,#303b50 0,transparent 43%),var(--bg);color:var(--text);font:15px/1.5 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+a{color:var(--gold)}button,input,select{font:inherit}button,select{cursor:pointer}button{background:var(--panel2);border:1px solid var(--line);border-radius:10px;color:var(--text);padding:9px 12px}button:hover{border-color:var(--gold)}button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.shell{max-width:1190px;margin:0 auto;padding:28px clamp(18px,3.8vw,42px) 60px}.top{display:flex;align-items:center;justify-content:space-between;gap:20px;border-bottom:1px solid var(--line);padding-bottom:20px}.brand{text-transform:uppercase;letter-spacing:.19em;color:var(--gold);font-size:12px;font-weight:750;text-decoration:none}.topright{display:flex;gap:9px;align-items:center}.subbrand{font-size:12px;color:var(--muted)}.hero{padding:34px 0 20px}.eyebrow{text-transform:uppercase;letter-spacing:.17em;color:var(--gold);font-size:11px;font-weight:750}.hero h1{font-family:Georgia,serif;letter-spacing:-.018em;font-weight:400;font-size:clamp(32px,4.5vw,53px);margin:8px 0 5px}.hero p{color:var(--muted);max-width:720px;margin:0}.notice{margin:20px 0 26px;padding:13px 16px;border:1px solid #4c4b41;border-radius:12px;background:#24261f;font-size:13px;color:#ddd4b6}.muted{color:var(--muted)}
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.metric{background:linear-gradient(165deg,var(--panel),#161b25);border:1px solid var(--line);padding:18px;border-radius:var(--radius)}.metric .n{font-size:30px;font-weight:650;letter-spacing:-.05em;font-variant-numeric:tabular-nums}.metric .lab{font-size:12px;letter-spacing:.04em;color:var(--muted)}.progress{height:8px;border-radius:20px;background:#30384a;overflow:hidden;margin:18px 0 12px}.progress span{display:block;height:100%;background:linear-gradient(90deg,#829d86,#b7d7b7);width:0;transition:width .25s}
+.tabs{display:flex;gap:5px;border-bottom:1px solid var(--line);margin:22px 0 18px}.tab{border:0;background:none;color:var(--muted);border-radius:0;padding:13px 16px;margin-bottom:-1px;border-bottom:2px solid transparent}.tab[aria-selected="true"]{color:var(--gold);border-color:var(--gold)}.toolbar{display:grid;grid-template-columns:minmax(240px,2.25fr) repeat(4,minmax(125px,1fr));gap:10px;margin-bottom:16px}input[type=search],input[type=text],input[type=number],select{background:#151b26;color:var(--text);border:1px solid var(--line);border-radius:10px;width:100%;padding:10px 12px;min-width:0}input::placeholder{color:#8c98a9}label.field{display:block;color:var(--muted);font-size:12px}.field span{display:block;margin-bottom:5px}
+.section{border:1px solid var(--line);background:var(--panel);border-radius:var(--radius);margin:15px 0;overflow:hidden}.section-head{display:flex;justify-content:space-between;gap:10px;align-items:center;background:#202836;padding:14px 18px;border-bottom:1px solid var(--line)}.section h2{font-size:16px;margin:0;font-weight:650}.section small{color:var(--muted)}.section-count{color:var(--gold);font-variant-numeric:tabular-nums;white-space:nowrap}.table-scroll{overflow-x:auto}.gear-table{width:100%;border-collapse:collapse;min-width:880px}.master-table{min-width:1050px}.gear-table th{text-align:left;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:650;padding:10px 15px;background:#161c27}.gear-table td{padding:13px 15px;border-top:1px solid var(--line);vertical-align:top}.gear-table tbody tr:hover{background:#222b37}.gear-table th:last-child,.gear-table td:last-child{text-align:center}.gear-name{font-weight:620}.gear-note{font-size:12px;color:var(--muted);margin-top:4px;max-width:430px}.jobpill,.statuspill{display:inline-block;border:1px solid #465368;border-radius:6px;padding:2px 7px;font-size:11px;font-weight:700;letter-spacing:.03em;white-space:nowrap}.statuspill{font-weight:500;color:#d6dfed}.statuspill.ready{color:#c6e3cb;border-color:#4d775c}.statuspill.blocked{color:#e1caa3;border-color:#796746}.statuspill.deferred{color:#c5b5d8;border-color:#645577}.check{width:20px;height:20px;accent-color:#9cbe9e;cursor:pointer}.done .gear-name{text-decoration:line-through;color:#9db1a6}.gear-actions{display:flex;gap:5px;align-items:center;justify-content:center}.smallbtn{padding:4px 8px;font-size:11px}.select-mini{padding:5px 6px;border-radius:6px;font-size:11px;min-width:100px}
+.actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:18px 0}.primary{background:#bda573;color:#171a20;border-color:#cdb784;font-weight:700}.primary:hover{background:#ddc58e}.ghost{background:transparent}.danger{color:var(--danger)}.right{margin-left:auto}details{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:14px 18px;margin-top:20px}summary{cursor:pointer;color:var(--gold);font-weight:650}.form-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0}.form-grid .wide{grid-column:span 2}.hint{font-size:12px;color:var(--muted)}.empty{border:1px dashed var(--line);border-radius:var(--radius);padding:32px;text-align:center;color:var(--muted)}
+.mat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.material{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:18px}.material-head{display:flex;justify-content:space-between;gap:12px}.material h3{margin:0;font-size:16px}.material p{margin:4px 0 13px;font-size:12px;color:var(--muted)}.material label{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:12px}.material input{width:110px}.mat-stats{font-size:12px;color:var(--muted);margin-top:10px;font-variant-numeric:tabular-nums}.mat-stats strong{color:var(--gold)}.mat-bar{height:6px;background:#31394a;border-radius:10px;overflow:hidden;margin-top:13px}.mat-bar span{display:block;background:#b2c8a3;height:100%}.footer{margin-top:40px;padding-top:20px;border-top:1px solid var(--line);font-size:12px;color:var(--muted);display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between}.hidden{display:none!important}
+@media(max-width:760px){.metrics{grid-template-columns:repeat(2,1fr)}.toolbar{grid-template-columns:repeat(2,minmax(0,1fr))}.toolbar>input{grid-column:1/-1}.form-grid{grid-template-columns:repeat(2,1fr)}.mat-grid{grid-template-columns:1fr}.topright .subbrand{display:none}}@media(max-width:430px){.form-grid{grid-template-columns:1fr}.form-grid .wide{grid-column:1}.actions .right{margin-left:0}.hero{padding-top:24px}.metrics{gap:8px}.metric{padding:13px}.metric .n{font-size:25px}}
+
+/* Acquisitions v0.2: clickable sorting, flat-view layout, and quick facet filtering. */
+.layout-switch{display:inline-flex;gap:3px;align-items:center;background:#141a24;border:1px solid var(--line);border-radius:10px;padding:3px}
+.layout-switch .layout-option{padding:6px 11px;border:0;background:transparent;color:var(--muted);border-radius:7px;font-size:12px;font-weight:600}
+.layout-switch .layout-option[aria-pressed="true"]{background:#3b4050;color:var(--text);box-shadow:0 1px 4px #0004}
+.sort-hint{color:var(--muted);font-size:12px;margin:2px 0 14px}
+.sort-hint strong{color:var(--gold);font-weight:650}
+.gear-table th{padding:0;background:#161c27}
+.sort-head{background:transparent;border:0;border-radius:0;width:100%;min-height:41px;display:flex;align-items:center;justify-content:flex-start;gap:6px;text-align:left;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700;padding:10px 13px;white-space:nowrap}
+.sort-head:hover{background:#30394a;color:var(--text);border:0}
+.sort-head:focus-visible{outline:2px solid var(--gold);outline-offset:-3px}
+.gear-table th[aria-sort="ascending"] .sort-head,.gear-table th[aria-sort="descending"] .sort-head{background:#323a47;color:var(--gold)}
+.sort-arrow{color:#768297;font-size:13px;line-height:1;letter-spacing:0}
+.gear-table th[aria-sort="ascending"] .sort-arrow,.gear-table th[aria-sort="descending"] .sort-arrow{color:var(--gold)}
+.facet-job,.facet-source,.facet-method{cursor:pointer}
+.facet-job{background:transparent;color:#f0e8d5}
+.facet-job:hover,.facet-source:hover,.facet-method:hover{color:var(--gold);text-decoration:underline;text-underline-offset:3px}
+.facet-source,.facet-method{background:transparent;color:inherit;padding:0;border:0;text-align:left;font-size:inherit;line-height:1.45;border-radius:2px}
+.facet-source:hover,.facet-method:hover{border-color:transparent}
+.table-tip{font-size:11px;color:var(--muted);margin-top:7px}
+@media(max-width:760px){.sort-hint{margin-top:0}.layout-switch{width:100%;justify-content:center}.layout-switch .layout-option{flex:1}.sort-head{padding:10px}}
+
+/* Dusty Chronicle Wardrobe Ledger v0.3 */
+body{line-height:1.48}.shell{max-width:1370px}.metrics{grid-template-columns:repeat(4,1fr)}
+.notice{background:#1f2831;border-color:#374854}.hero{padding-bottom:16px}
+.metric .n{font-size:29px}.tab{font-size:14px}.master-table{min-width:1080px}
+.gear-table th:last-child,.gear-table td:last-child{text-align:center}.gear-table td{padding:11px 13px}
+.gear-name-link{border:0;padding:0;background:none;color:var(--text);font-weight:650;text-align:left;border-bottom:1px dotted #8798a9;border-radius:0;line-height:1.5}.gear-name-link:hover{color:var(--gold);border-color:var(--gold)}
+.gear-table .gear-note{max-width:390px}.cost-cell{font-size:12px;white-space:normal;max-width:235px;color:#e2d1ab}.cost-link{color:var(--gold);font-weight:600;border:0;padding:0;background:none;text-align:left}.cost-link:hover{border:0;text-decoration:underline}.statuspill.owned{color:#b4d9bc;border-color:#537963}.subtle-note{color:var(--muted);font-size:11px}.toolbar{grid-template-columns:minmax(240px,2.25fr) repeat(4,minmax(125px,1fr))}
+.quest-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.requirements-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.reqcard{padding:18px;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius)}.reqcard h2{margin:0 0 6px;font-size:17px;font-weight:650}.reqcard .hint{margin:0 0 15px}.reqitem{display:flex;gap:12px;justify-content:space-between;align-items:baseline;padding:10px 0;border-top:1px solid var(--line)}.reqitem strong{color:var(--gold);font-variant-numeric:tabular-nums;font-size:14px;white-space:nowrap}.reqitem .subtle-note{max-width:300px}.taskrow{display:flex;gap:10px;align-items:flex-start;padding:12px 0;border-top:1px solid var(--line)}.taskrow:first-of-type{border-top:0}.taskrow input{flex-shrink:0;margin-top:4px}.taskrow label{flex:1;cursor:pointer}.taskrow.done strong{text-decoration:line-through;color:#9ab4a1}.taskrow small{display:block;color:var(--muted);font-size:12px;margin-top:3px}.reqgroup{margin-top:16px}.reqgroup:first-child{margin-top:0}.reqgroup h3{margin:0 0 4px;color:var(--gold);font-size:13px}.reqgroup .reqitem:first-of-type{border:0}
+.status-message{font-size:12px;color:var(--muted);margin:9px 0 0;min-height:18px}.status-message.success{color:var(--sage)}.status-message.warn{color:#edcb9b}.wiki-import{background:#171f2b;border:1px solid #485569;border-radius:12px;padding:15px 17px;margin:14px 0}.wiki-import h3{font-size:14px;font-weight:650;margin:0 0 4px}.wiki-import .import-row{display:flex;gap:8px;align-items:center;margin-top:10px}.wiki-import input{flex:1}.wiki-import button{flex:none}.form-grid textarea{font:inherit;background:#151b26;color:var(--text);border:1px solid var(--line);border-radius:10px;width:100%;padding:10px 12px;resize:vertical;min-height:66px}.form-grid label{color:var(--muted);font-size:12px}.form-grid label span{display:block;margin-bottom:5px}.form-grid .full{grid-column:1/-1}.form-grid .wide{grid-column:span 2}
+.dialog{border:1px solid #526176;border-radius:16px;background:#191f2b;color:var(--text);width:min(620px,calc(100vw - 30px));max-height:min(86vh,900px);overflow:auto;padding:24px;box-shadow:0 22px 90px #000a}.dialog::backdrop{background:#080a12bc}.dialog header{display:flex;align-items:start;justify-content:space-between;gap:12px}.dialog h2{margin:0;font-family:Georgia,serif;font-size:27px;font-weight:400}.dialog h3{margin:18px 0 7px;font-size:13px;letter-spacing:.07em;text-transform:uppercase;color:var(--gold)}.dialog .dialog-links{margin:8px 0}.dialog ul,.dialog ol{padding-left:24px;margin:8px 0}.dialog li{margin:5px 0}.dialog .source-meta{font-size:12px;color:var(--muted);margin:5px 0}.dialog .dialog-footer{border-top:1px solid var(--line);padding-top:12px;margin-top:18px;color:var(--muted);font-size:12px}.dialog .x{background:transparent;border:1px solid var(--line);border-radius:7px;padding:3px 10px;font-size:21px}.dialog .x:hover{color:var(--gold)}
+.toolbar-meta{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;align-items:center;margin-top:6px}.sort-hint{margin-top:1px}
+@media(max-width:1000px){.requirements-grid{grid-template-columns:1fr}.toolbar{grid-template-columns:repeat(2,minmax(0,1fr))}.toolbar>input{grid-column:1/-1}}
+@media(max-width:700px){.metrics{grid-template-columns:repeat(2,1fr)}.quest-grid{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}.form-grid .wide,.form-grid .full{grid-column:1}.wiki-import .import-row{flex-direction:column;align-items:stretch}.wiki-import button{width:100%}.dialog{padding:18px}.actions{margin:12px 0}}
+
+.paste-import{margin-top:13px;padding-top:10px;border-top:1px solid #3b4758}
+.paste-import>summary{cursor:pointer;color:#dfc28d;font-size:12px;font-weight:600}
+.paste-import .hint{margin:9px 0;font-size:12px}
+.paste-import textarea{display:block;width:100%;min-height:95px;resize:vertical;padding:11px 12px;border:1px solid var(--line);border-radius:9px;color:var(--text);background:#151b26;font:inherit}
+.paste-import button{margin-top:9px}.paste-import kbd{font-size:11px;color:#dec99b}
+</style>
+</head>
+<body>
+<main class="shell">
+<header class="top"><a href="./" class="brand">Dusty Chronicle</a><div class="topright"><span class="subbrand">Interactive tools / v0.3.2</span><a href="./">← Home</a></div></header>
+<section class="hero"><h1>Wardrobe Ledger</h1></section>
+<div class="notice">The ledger starts with a 41-piece example wardrobe. <strong>Changes are saved in this browser only.</strong> Export a backup if you change devices. Materials listed are the <em>total requirements of unfinished items</em>, not a count of your inventory.</div>
+<section class="metrics" aria-label="Progress overview">
+<div class="metric"><div class="n" id="count-all">—</div><div class="lab">Tracked gear pieces</div></div>
+<div class="metric"><div class="n" id="count-owned">—</div><div class="lab">Items owned</div></div>
+<div class="metric"><div class="n" id="count-needed">—</div><div class="lab">Still needed</div></div>
+<div class="metric"><div class="n" id="count-quests">—</div><div class="lab">Outstanding unlocks</div></div>
+</section>
+<div class="progress" role="progressbar" aria-label="Gear completion" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="overall-progress"><span></span></div>
+<div class="tabs" role="tablist" aria-label="Ledger sections">
+<button class="tab" type="button" id="tab-gear" data-tab="gear" role="tab" aria-selected="true" aria-controls="panel-gear">Acquisitions</button>
+<button class="tab" type="button" id="tab-requirements" data-tab="requirements" role="tab" aria-selected="false" aria-controls="panel-requirements">Outstanding requirements</button>
+</div>
+<section id="panel-gear" role="tabpanel" aria-labelledby="tab-gear">
+<div class="toolbar">
+<input type="search" id="search" placeholder="Search equipment, cost, source, or notes…" aria-label="Search equipment">
+<select id="source" aria-label="Filter by source"><option value="">All sources</option></select>
+<select id="job" aria-label="Filter by job"><option value="">All jobs</option></select>
+<select id="method" aria-label="Filter by method"><option value="">All methods</option></select>
+<select id="view" aria-label="Filter by ownership"><option value="missing">Still needed</option><option value="all">All items</option><option value="owned">Owned</option></select>
+</div>
+<div class="actions"><div class="layout-switch" role="group" aria-label="Choose acquisition table layout"><button type="button" class="layout-option" data-layout="master" aria-pressed="true">Master list</button><button type="button" class="layout-option" data-layout="source" aria-pressed="false">By source</button></div>
+<button class="primary" type="button" id="show-add">+ Add a piece</button><span class="hint" id="filtered-count" aria-live="polite"></span></div>
+<p class="sort-hint">Click column headers to sort; click again to reverse. Click a job, source, or method to filter. <strong id="sort-summary"></strong></p>
+<div id="gear-groups"></div>
+<details id="add-panel"><summary>Add a piece to your wardrobe</summary>
+<div class="wiki-import"><h3>Import from the FFXIV Wiki</h3><p class="hint">Paste an item page URL to prefill details. Review the result before adding; wiki acquisition information may not always be accessible from another website.</p>
+<div class="import-row"><input type="url" id="wiki-url" placeholder="https://ffxiv.consolegameswiki.com/wiki/Faire_Joi" aria-label="FFXIV Wiki item URL"><button id="fetch-wiki" type="button">Fetch details</button></div><p class="status-message" id="wiki-status" role="status" aria-live="polite"></p>
+<details class="paste-import"><summary>Wiki details missing? Paste the page text instead</summary><p class="hint">Open the item on the wiki, press <kbd>Ctrl+A</kbd> then <kbd>Ctrl+C</kbd>, and paste the copied page here. This reads the text in your browser without contacting another service.</p><textarea id="wiki-paste" rows="5" placeholder="Paste the text from the wiki item page here…" aria-label="Copied text from the FFXIV Wiki"></textarea><button id="parse-wiki-paste" type="button">Read pasted page</button></details></div>
+<form id="add-form"><div class="form-grid">
+<label class="wide"><span>Item name *</span><input name="name" required maxlength="120" type="text" placeholder="Example: Faire Joi"></label>
+<label><span>Job / glamour</span><input name="job" type="text" maxlength="20" placeholder="DNC"></label>
+<label><span>Equipment slot</span><select name="slot"><option>Head</option><option>Body</option><option>Hands</option><option>Legs</option><option>Feet</option><option>Weapon</option><option>Facewear</option><option>Other</option></select></label>
+<label><span>Required job level</span><input name="level" type="number" min="1" max="150" placeholder="Unknown"></label>
+<label><span>Source / location *</span><input name="source" type="text" required maxlength="120" placeholder="Wolves' Den Pier"></label>
+<label><span>Acquisition method</span><input name="method" type="text" maxlength="120" placeholder="Wolf Marks vendor"></label>
+<label class="wide"><span>Cost shown on table</span><input name="cost" type="text" maxlength="200" placeholder="4,000 Wolf Marks or Raid drop"></label>
+<label class="full"><span>Quantified requirements (optional, one per line)</span><textarea name="resources" rows="2" placeholder="1500 Wolf Marks\n20 Bitter Memories"></textarea><small class="hint">These numbers contribute to Outstanding Requirements until the item is checked off.</small></label>
+<label class="full"><span>Source link</span><input name="wikiUrl" type="url" placeholder="https://ffxiv.consolegameswiki.com/wiki/..."></label>
+<label class="full"><span>Notes</span><textarea name="notes" rows="2" maxlength="700" placeholder="Alternative acquisition, quest prerequisites, dye details…"></textarea></label>
+</div><label><input type="checkbox" name="dyeNeeded"> Requires dye-unlock quest to finish the glamour</label>
+<p><button type="submit" class="primary">Add item</button> <button type="button" id="cancel-add" class="ghost">Cancel</button></p></form></details>
+</section>
+<section id="panel-requirements" role="tabpanel" aria-labelledby="tab-requirements" class="hidden">
+<p class="muted">Automatically calculated from unchecked equipment. Checking off a finished item removes its material and currency requirements. Shared unlocks are listed once, regardless of how many items depend on them.</p>
+<div class="requirements-grid"><article class="reqcard"><h2>Currency &amp; material requirements</h2><p class="hint">Outstanding item totals; your actual inventory is not tracked.</p><div id="resource-totals"></div></article>
+<article class="reqcard"><h2>Questlines &amp; progression</h2><p class="hint">Mark an unlock once when it's completed. This is separate from owning its equipment.</p><div id="milestone-groups"></div></article></div>
+</section>
+<section class="actions" aria-label="Data management"><button id="export" type="button">Export backup (.json)</button><button id="import" type="button">Import backup</button><input id="import-file" class="hidden" type="file" accept="application/json,.json"><span class="right"></span><button id="blank" type="button" class="ghost">Start blank</button><button id="reset" type="button" class="ghost danger">Restore sample data</button></section>
+<footer class="footer"><span>Dusty Chronicle · Static site · No account or server storage</span></footer>
+</main>
+<dialog class="dialog" id="item-dialog" aria-labelledby="detail-name"><header><div><h2 id="detail-name"></h2><p class="source-meta" id="detail-meta"></p></div><button class="x" type="button" id="close-detail" aria-label="Close item details">×</button></header><div id="detail-content"></div></dialog>
+<script type="application/json" id="seed-data">{"items":[{"id":"ledger-001","name":"Hemiskin Brais of Maiming","job":"DRG","slot":"Legs","source":"Market Board","method":"Market Board","level":null,"owned":false,"dyeNeeded":false,"dyeUnlocked":false,"notes":"Gil available; item not yet confirmed purchased","cost":"Gil · price varies","original":true,"resources":[],"prerequisites":[],"steps":[],"wikiUrl":"https://ffxiv.consolegameswiki.com/wiki/Hemiskin_Brais_of_Maiming"},{"id":"ledger-002","name":"Eikon Cloth Sleeves of Aiming","job":"DNC","slot":"Hands","source":"Market Board","method":"Market Board","level":null,"owned":false,"dyeNeeded":false,"dyeUnlocked":false,"notes":"Gil available; item not yet confirmed purchased","cost":"Gil · price varies","original":true,"resources":[],"prerequisites":[],"steps":[],"wikiUrl":"https://ffxiv.consolegameswiki.com/wiki/Eikon_Cloth_Sleeves_of_Aiming"},{"id":"ledger-003","name":"Rakshasa Hakama of Aiming","job":"DNC","slot":"Legs","source":"Market Board","method":"Market Board","level":null,"owned":false,"dyeNeeded":false,"dyeUnlocked":false,"notes":"Gil available; item not yet confirmed purchased","cost":"Gil · price varies","original":true,"resources":[],"prerequisites":[],"steps":[],"wikiUrl":"https://ffxiv.consolegameswiki.com/wiki/Rakshasa_Hakama_of_Aiming"},{"id":"ledger-004","name":"Star Pilot Helm","job":"MCH","slot":"Head","source":"Market Board","method":"Market Board","level":null,"owned":false,"dyeNeeded":false,"dyeUnlocked":false,"notes":"Gil available; item not yet confirmed purchased","cost":"Gil · price varies","original":true,"resources":[],"prerequisites":[],"steps":[],"wikiUrl":"https://ffxiv.consolegameswiki.com/wiki/Star_Pilot_Helm"},{"id":"ledger-005","name":"Iridescent Hat of Aiming","job":"SAM","slot":"Head","source":"Market Board","method":"Market Board","level":null,"owned":false,"dyeNeeded":false,"dyeUnlocked":false,"notes":"Gil available; item not yet confirmed purchased","cost":"Gil · price varies","original":true,"resources":[],"prerequisites":[],"steps":[],"wikiUrl":"https://ffxiv.consolegameswiki.com/wiki/Iridescent_Hat_of_Aiming"},{"id":"ledger-006","name":"Uraeus Coat","job":"SAM","slot":"Body","source":"Market Board","method":"Market Board","level":null,"owned":false,"dyeNeeded":false,"dyeUnlocked":false,"notes":"Gil available; item not yet confirmed purchased","cost":"Gil · price varies","original":true,"resources":[],"prerequisites":[],"steps":[],"wikiUrl":"https://ffxiv.consolegameswiki.com/wiki/Uraeus_Coat"},{"id":"ledger-007","name":"Noir Shoes","job":"SAM","slot":"Feet","source":"Market Board","method":"Market Board","level":null,"owned":false,"dyeNeeded":false,"dyeUnlocked":false,"notes":"Gil available; item not yet confirmed purchased","cost":"Gil · price varies","original":true,"resources":[],"prerequisites":[],"steps":[],"wikiUrl":"https://ffxiv.consolegameswiki.com/wiki/Noir_Shoes"},{"id":"ledger-008","name":"Ruthenium Blade","job":"SAM","slot":"Weapon","source":"Market Board","method":"Market Board","level":null,"owned":false,"dyeNeeded":false,"dyeUnlocked":false,"notes":"Gil available; item not yet confirmed purchased","cost":"Gil · price varies","original":true,"resources":[],"prerequisites":[],"steps":[],"wikiUrl":"https://ffxiv.consolegameswiki.com/wiki/Ruthenium_Blade"},{"id":"ledger-009","name":"Late Allagan Armor of Aiming","job":"MCH","slot":"Body","source":"Wolves' Den Pier","method":"Wolf Marks vendor","level":null,"owned":false,"dyeNeeded":false,"dyeUnlocked":false,"notes":"","cost":"4,000 Wolf Marks","original":true,"resources":[{"amount":4000,"name":"Wolf Marks"}],"prerequisites":[],"steps":[],"wikiUrl":"https://ffxiv.consolegameswiki.com/wiki/Late_Allagan_Armor_of_Aiming"},{"id":"ledger-010","name":"Late Allagan Gloves of Healing","job":"MCH","slot":"Hands","source":"Wolves' Den Pier","method":"Wolf Marks vendor","level":null,"owned":false,"dyeNeeded":false,"dyeUnlocked":false,"notes":"","cost":"2,000 Wolf Marks","original":true,"resources":[{"amount":2000,"name":"Wolf Marks"}],"prerequisites":[],"steps":[],"wikiUrl":"https://ffxiv.consolegameswiki.com/wiki/Late_Allagan_Gloves_of_Healing"},{"id":"ledger-011","name":"Late Allagan Bottoms of Aiming","job":"MCH","slot":"Legs","source":"Wolves' Den Pier","method":"Wolf Marks vendor","level":null,"owned":false,"dyeNeeded":false,"dyeUnlocked":false,"notes":"","cost":"4,000 Wolf Marks","original":true,"resources":[{"amount":4000,"name":"Wolf Marks"}],"prerequisites":[],"steps":[],"wikiUrl":"https://ffxiv.consolegameswiki.com/wiki/Late_Allagan_Bottoms_of_Aiming"},{"id":"ledger-012","name":"Late Allagan Sollerets of Aiming","job":"MCH","slot":"Feet","source":"Wolves' Den Pier","method":"Wolf Marks vendor","level":null,"owned":false,"dyeNeeded":false,"dyeUnlocked":false,"notes":"","cost":"2,000 Wolf Marks","original":true,"resources":[{"amount":2000,"name":"Wolf Marks"}],"prerequisites":[],"steps":[],"wikiUrl":"https://ffxiv.consolegameswiki.com/wiki/Late_Allagan_Sollerets_of_Aiming"},{"id":"ledger-013","name":"Virtu Dragonlancer's Schynbalds","job":"DRG","slot":"Feet","source":"Wolves' Den Pier","method":"Trophy Crystals vendor","level":null,"owned":false,"dyeNeeded":false,"dyeUnlocked":false,"notes":"","cost":"1,500 Trophy Crystals","original":true,"resources":[{"amount":1500,"name":"Trophy Crystals"}],"prerequisites":[],"steps":[],"wikiUrl":"https://ffxiv.consolegameswiki.com/wiki/Virtu_Dragonlancer%27s_Schynbalds"},{"id":"ledger-014","name":"Faire Joi","job":"DNC","slot":"Body","source":"Online Store / seasonal vendor","method":"Online Store / event","level":null,"owned":false,"dyeNeeded":false,"dyeUnlocked":false,"notes":"Confirm entitlement/availability before purchase","cost":"Online Store / event","original":true,"resources":[],"prerequisites":[],"steps":[],"wikiUrl":"https://ffxiv.consolegameswiki.com/wiki/Faire_Joi"},{"id":"ledger-015","name":"Leal Samurai's Geta","job":"DNC","slot":"Feet","source":"Online Store","method":"Online Store","level":null,"owned":false,"dyeNeeded":false,"dyeUnlocked":false,"notes":"Confirm entitlement/availability before purchase","cost":"Online Store / event","original":true,"resources":[],"prerequisites":[],"steps":[],"wikiUrl":"https://ffxiv.consolegameswiki.com/wiki/Leal_Samurai%27s_Geta"},{"id":"ledger-016","name":"Vana'dielian Gauntlets of Fending","job":"PLD","slot":"Hands","source":"Windurst: The Third Walk","method":"Alliance raid drop","level":null,"owned":false,"dyeNeeded":false,"dyeUnlocked":false,"notes":"Confirm exact item naming/loot availability","cost":"Raid drop","original":true,"resources":[],"prerequisites":[],"steps":[],"wikiUrl":"https://ffxiv.consolegameswiki.com/wiki/Vana%27dielian_Gauntlets_of_Fending"},{"id":"ledger-017","name":"Vana'dielian Breeches of Fending","job":"PLD","slot":"Legs","source":"Windurst: The Third Walk","method":"Alliance raid drop","level":null,"owned":false,"dyeNeeded":false,"dyeUnlocked":false,"notes":"Confirm exact item naming/loot availability","cost":"Raid drop","original":true,"resources":[],"prerequisites":[],"steps":[],"wikiUrl":"https://ffxiv.consolegameswiki.com/wiki/Vana%27dielian_Breeches_of_Fending"},{"id":"ledger-018","name":"Vana'dielian Sollerets of Fending","job":"PLD","slot":"Feet","source":"Windurst: The Third Walk","method":"Alliance raid drop","level":null,"owned":false,"dyeNeeded":false,"dyeUnlocked":false,"notes":"Confirm exact item naming/loot availability","cost":"Raid drop","original":true,"resources":[],"prerequisites":[],"steps":[],"wikiUrl":"https://ffxiv.consolegameswiki.com/wiki/Vana%27dielian_Sollerets_of_Fending"},{"id":"ledger-019","name":"Vana'dielian Crown of Striking","job":"MNK","slot":"Head","source":"Windurst: The Third Walk","method":"Alliance raid drop","level":null,"owned":false,"dyeNeeded":false,"dyeUnlocked":false,"notes":"Confirm exact item naming/loot availability","cost":"Raid drop","original":true,"resources":[],"prerequisites":[],"steps":[],"wikiUrl":"https://ffxiv.consolegameswiki.com/wiki/Vana%27dielian_Crown_of_Striking"},{"id":"ledger-020","name":"Vana'dielian Gloves of Striking","job":"MNK","slot":"Hands","source":"Windurst: The Third Walk","method":"Alliance raid drop","level":null,"owned":false,"dyeNeeded":false,"dyeUnlocked":false,"notes":"Confirm exact item naming/loot availability","cost":"Raid drop","original":true,"resources":[],"prerequisites":[],"steps":[],"wikiUrl":"https://ffxiv.consolegameswiki.com/wiki/Vana%27dielian_Gloves_of_Striking"},{"id":"ledger-021","name":"Vana'dielian Gaiters of Striking","job":"MNK","slot":"Feet","source":"Windurst: The Third Walk","method":"Alliance raid drop","level":null,"owned":false,"dyeNeeded":false,"dyeUnlocked":false,"notes":"Confirm exact item naming/loot availability","cost":"Raid drop","original":true,"resources":[],"prerequisites":[],"steps":[],"wikiUrl":"https://ffxiv.consolegameswiki.com/wiki/Vana%27dielian_Gaiters_of_Striking"},{"id":"ledger-022","name":"Ark Angel's Visor of Striking","job":"RPR","slot":"Head","source":"Jeuno: The First Walk","method":"Alliance raid drop","level":null,"owned":false,"dyeNeeded":false,"dyeUnlocked":false,"notes":"Cross-job glamour; Striking appearance","cost":"Raid drop","original":true,"resources":[],"prerequisites":[],"steps":[],"wikiUrl":"https://ffxiv.consolegameswiki.com/wiki/Ark_Angel%27s_Visor_of_Striking"},{"id":"ledger-023","name":"Ark Angel's Gauntlets of Striking","job":"RPR","slot":"Hands","source":"Jeuno: The First Walk","method":"Alliance raid drop","level":null,"owned":false,"dyeNeeded":false,"dyeUnlocked":false,"notes":"Cross-job glamour; Striking appearance","cost":"Raid drop","original":true,"resources":[],"prerequisites":[],"steps":[],"wikiUrl":"https://ffxiv.consolegameswiki.com/wiki/Ark_Angel%27s_Gauntlets_of_Striking"},{"id":"ledger-024","name":"Ark Angel's Thighboots of Striking","job":"RPR","slot":"Feet","source":"Jeuno: The First Walk","method":"Alliance raid drop","level":null,"owned":false,"dyeNeeded":false,"dyeUnlocked":false,"notes":"Cross-job glamour; Striking appearance","cost":"Raid drop","original":true,"resources":[],"prerequisites":[],"steps":[],"wikiUrl":"https://ffxiv.consolegameswiki.com/wiki/Ark_Angel%27s_Thighboots_of_Striking"},{"id":"ledger-025","name":"Tiamat Mail","job":"DRG","slot":"Body","source":"Old Sharlayan","method":"Artifact gear vendor","level":89,"owned":false,"dyeNeeded":true,"dyeUnlocked":false,"notes":"Needs job level AND melee role-quest dye unlock","cost":"Free · dye quest required","original":true,"resources":[],"prerequisites":["drg89","ew_melee"],"steps":[],"wikiUrl":"https://ffxiv.consolegameswiki.com/wiki/Tiamat_Mail"},{"id":"ledger-026","name":"Tiamat Gauntlets","job":"DRG","slot":"Hands","source":"Old Sharlayan","method":"Artifact gear vendor","level":89,"owned":false,"dyeNeeded":true,"dyeUnlocked":false,"notes":"Needs job level AND melee role-quest dye unlock","cost":"Free · dye quest required","original":true,"resources":[],"prerequisites":["drg89","ew_melee"],"steps":[],"wikiUrl":"https://ffxiv.consolegameswiki.com/wiki/Tiamat_Gauntlets"},{"id":"ledger-027","name":"Hachiya Tsutsu-hakama","job":"NIN","slot":"Legs","source":"Old Sharlayan","method":"Artifact gear vendor","level":89,"owned":false,"dyeNeeded":true,"dyeUnlocked":false,"notes":"Needs job level AND melee role-quest dye unlock","cost":"Free · dye quest required","original":true,"resources":[],"prerequisites":["nin89","ew_melee"],"steps":[],"wikiUrl":"https://ffxiv.consolegameswiki.com/wiki/Hachiya_Tsutsu-hakama"},{"id":"ledger-028","name":"Hachiya Zori","job":"NIN","slot":"Feet","source":"Old Sharlayan","method":"Artifact gear vendor","level":89,"owned":false,"dyeNeeded":true,"dyeUnlocked":false,"notes":"Needs job level AND melee role-quest dye unlock","cost":"Free · dye quest required","original":true,"resources":[],"prerequisites":["nin89","ew_melee"],"steps":[],"wikiUrl":"https://ffxiv.consolegameswiki.com/wiki/Hachiya_Zori"},{"id":"ledger-029","name":"Heavensbound Armet","job":"DRG","slot":"Head","source":"Tuliyollal","method":"Artifact gear vendor","level":99,"owned":false,"dyeNeeded":true,"dyeUnlocked":false,"notes":"Needs job level AND melee role-quest dye unlock","cost":"Free · dye quest required","original":true,"resources":[],"prerequisites":["drg99","dt_melee"],"steps":[],"wikiUrl":"https://ffxiv.consolegameswiki.com/wiki/Heavensbound_Armet"},{"id":"ledger-030","name":"Momochi Chainmail","job":"NIN","slot":"Body","source":"Tuliyollal","method":"Artifact gear vendor","level":99,"owned":false,"dyeNeeded":true,"dyeUnlocked":false,"notes":"Needs job level AND melee role-quest dye unlock","cost":"Free · dye quest required","original":true,"resources":[],"prerequisites":["nin99","dt_melee"],"steps":[],"wikiUrl":"https://ffxiv.consolegameswiki.com/wiki/Momochi_Chainmail"},{"id":"ledger-031","name":"Momochi Tekko","job":"NIN","slot":"Hands","source":"Tuliyollal","method":"Artifact gear vendor","level":99,"owned":false,"dyeNeeded":true,"dyeUnlocked":false,"notes":"Needs job level AND melee role-quest dye unlock","cost":"Free · dye quest required","original":true,"resources":[],"prerequisites":["nin99","dt_melee"],"steps":[],"wikiUrl":"https://ffxiv.consolegameswiki.com/wiki/Momochi_Tekko"},{"id":"ledger-032","name":"Augmented Historia Trousers of Aiming","job":"SAM","slot":"Legs","source":"Solution Nine","method":"Mathematics vendor","level":null,"owned":false,"dyeNeeded":false,"dyeUnlocked":false,"notes":"Obsolete Dawntrail tome gear; vendor Mathematics cost to verify","cost":"Mathematics · amount to verify","original":true,"resources":[],"prerequisites":[],"steps":[],"wikiUrl":"https://ffxiv.consolegameswiki.com/wiki/Augmented_Historia_Trousers_of_Aiming"},{"id":"ledger-033","name":"Carwen Bandana","job":"DNC","slot":"Head","source":"Occult Crescent","method":"Zone vendor","level":null,"owned":false,"dyeNeeded":false,"dyeUnlocked":false,"notes":"Confirm zone currency and quantity","cost":"Zone currency · amount to verify","original":true,"resources":[],"prerequisites":[],"steps":[],"wikiUrl":"https://ffxiv.consolegameswiki.com/wiki/Carwen_Bandana"},{"id":"ledger-034","name":"Phantom War Hammer Occultum","job":"WAR","slot":"Weapon","source":"Occult Crescent","method":"Phantom relic upgrades","level":100,"owned":false,"dyeNeeded":false,"dyeUnlocked":false,"notes":"Four 1,500-Mathematics upgrades per weapon; verify one-time unlock if needed","cost":"6,000 Mathematics","original":true,"resources":[{"amount":6000,"name":"Mathematics"}],"prerequisites":["phantom"],"steps":["Obtain the four 1,500-Mathematics weapon upgrades.","Finish any necessary one-time Phantom weapon objectives."],"wikiUrl":""},{"id":"ledger-035","name":"Phantom Fans Occultum","job":"DNC","slot":"Weapon","source":"Occult Crescent","method":"Phantom relic upgrades","level":100,"owned":false,"dyeNeeded":false,"dyeUnlocked":false,"notes":"Four 1,500-Mathematics upgrades per weapon; verify one-time unlock if needed","cost":"6,000 Mathematics","original":true,"resources":[{"amount":6000,"name":"Mathematics"}],"prerequisites":["phantom"],"steps":["Obtain the four 1,500-Mathematics weapon upgrades.","Finish any necessary one-time Phantom weapon objectives."],"wikiUrl":""},{"id":"ledger-036","name":"Majestic Manderville Knives","job":"NIN","slot":"Weapon","source":"Radz-at-Han","method":"Manderville relic upgrades","level":90,"owned":false,"dyeNeeded":false,"dyeUnlocked":false,"notes":"Manderville questline already completed; target stage 3","cost":"4,500 Poetics","original":true,"resources":[{"amount":4500,"name":"Poetics"}],"prerequisites":[],"steps":["Manderville: 1,500 Poetics (3 meteorites).","Amazing Manderville: 1,500 Poetics (3 chondrites).","Majestic Manderville: 1,500 Poetics (3 achondrites). Stop here."],"wikiUrl":"https://ffxiv.consolegameswiki.com/wiki/Majestic_Manderville_Knives"},{"id":"ledger-037","name":"Samsara Recollection","job":"MNK","slot":"Weapon","source":"Bozja / Heavensward FATEs","method":"Resistance relic upgrades","level":80,"owned":false,"dyeNeeded":false,"dyeUnlocked":false,"notes":"Stop at Stage 3; FATE and Bozja memories","cost":"Multi-stage Recollection · see details","original":true,"resources":[{"amount":4,"name":"Thavnairian Scalepowders"},{"amount":1000,"name":"Poetics"},{"amount":20,"name":"Tortured Memories"},{"amount":20,"name":"Sorrowful Memories"},{"amount":20,"name":"Harrowing Memories"},{"amount":6,"name":"Bitter Memories"}],"prerequisites":[],"steps":["Obtain the base Resistance weapon (4 Thavnairian Scalepowders).","Augment it with 20 each of Tortured, Sorrowful, and Harrowing Memories.","Upgrade with 6 Bitter Memories to Samsara Recollection. Stop at Stage 3."],"wikiUrl":"https://ffxiv.consolegameswiki.com/wiki/Samsara_Recollection"},{"id":"ledger-038","name":"Dreizack Recollection (original)","job":"DRG","slot":"Weapon","source":"Bozja / Heavensward FATEs","method":"Resistance relic upgrades","level":80,"owned":false,"dyeNeeded":false,"dyeUnlocked":false,"notes":"Stop at Stage 3; do not pursue replica","cost":"Multi-stage Recollection · see details","original":true,"resources":[{"amount":4,"name":"Thavnairian Scalepowders"},{"amount":1000,"name":"Poetics"},{"amount":20,"name":"Tortured Memories"},{"amount":20,"name":"Sorrowful Memories"},{"amount":20,"name":"Harrowing Memories"},{"amount":6,"name":"Bitter Memories"}],"prerequisites":[],"steps":["Obtain the base Resistance weapon (4 Thavnairian Scalepowders).","Augment it with 20 each of Tortured, Sorrowful, and Harrowing Memories.","Upgrade with 6 Bitter Memories to the ORIGINAL Dreizack Recollection; no replica required."],"wikiUrl":"https://ffxiv.consolegameswiki.com/wiki/Dreizack_Recollection_%28original%29"},{"id":"ledger-039","name":"Anemos Kage-kakushi Somen","job":"NIN","slot":"Head","source":"Eureka Anemos","method":"Gerolt upgrades","level":70,"owned":false,"dyeNeeded":false,"dyeUnlocked":false,"notes":"Prior target listed as Kage-kakushi Somen; dyed Anemos upgrade intended","cost":"600 Protean Crystals + 150 Anemos Crystals","original":true,"resources":[{"amount":600,"name":"Protean Crystals"},{"amount":150,"name":"Anemos Crystals"}],"prerequisites":["anemos"],"steps":["Acquire the initial level 70 Ninja artifact headpiece.","Upgrade through the Anemos Gerolt steps using 600 Protean Crystals and 150 Anemos Crystals."],"wikiUrl":""},{"id":"ledger-040","name":"Hydatos Guillotine","job":"DRK","slot":"Weapon","source":"Eureka Hydatos","method":"Eureka relic upgrades","level":70,"owned":false,"dyeNeeded":false,"dyeUnlocked":false,"notes":"Very early Eureka overall; progressing in Anemos","cost":"Multi-stage relic · see details","original":true,"resources":[],"prerequisites":["anemos","hydatos"],"steps":["Continue from Anemos through Pagos and Pyros.","Unlock Hydatos and complete the Dark Knight Eureka weapon progression.","Exact materials and your current upgrade stage still need verification."],"wikiUrl":"https://ffxiv.consolegameswiki.com/wiki/Hydatos_Guillotine"},{"id":"ledger-041","name":"Isle Explorer's Leather Halfgloves","job":"SAM","slot":"Hands","source":"Island Sanctuary","method":"Cowries vendor","level":null,"owned":false,"dyeNeeded":false,"dyeUnlocked":false,"notes":"Island Sanctuary not yet started","cost":"2,000 Seafarer's Cowries","original":true,"resources":[{"amount":2000,"name":"Seafarer's Cowries"}],"prerequisites":["island"],"steps":[],"wikiUrl":"https://ffxiv.consolegameswiki.com/wiki/Isle_Explorer%27s_Leather_Halfgloves"}],"milestones":{"ew_melee":{"name":"Endwalker melee DPS role quests","detail":"Unlock dyeing for level 89 artifact gear","group":"Role quests"},"dt_melee":{"name":"Dawntrail melee DPS role quests","detail":"Unlock dyeing for level 99 artifact gear","group":"Role quests"},"drg89":{"name":"Dragoon → level 89","detail":"Currently level 80; unlock Endwalker DRG artifact equipment","group":"Job levels"},"drg99":{"name":"Dragoon → level 99","detail":"Currently level 80; unlock Dawntrail DRG artifact equipment","group":"Job levels"},"nin89":{"name":"Ninja → level 89","detail":"Currently level 81; unlock Endwalker NIN artifact equipment","group":"Job levels"},"nin99":{"name":"Ninja → level 99","detail":"Currently level 81; unlock Dawntrail NIN artifact equipment","group":"Job levels"},"anemos":{"name":"Eureka Anemos progression","detail":"Progress toward elemental level 20; Ninja headpiece","group":"Field operations"},"hydatos":{"name":"Reach Eureka Hydatos","detail":"Pagos and Pyros progression required first; DRK relic","group":"Field operations"},"island":{"name":"Unlock / progress Island Sanctuary","detail":"Deferred — required for Isle Explorer’s gloves","group":"Side content"},"phantom":{"name":"Complete Phantom weapon prerequisites","detail":"One-time prerequisites may be required for Occultum upgrades; verify","group":"Relic unlocks"}},"completedMilestones":{},"version":3}</script>
+<script>'use strict';
+const DATA_KEY='dusty-chronicle-wardrobe-v1'; // Intentionally retain the v0.1 / v0.2 key to preserve saved ownership.
+const PREF_KEY='dusty-chronicle-wardrobe-table-v2';
+const seed=JSON.parse(document.getElementById('seed-data').textContent);
+const seedById=new Map(seed.items.map(x=>[x.id,x]));
+const clone=x=>JSON.parse(JSON.stringify(x));
+const $=id=>document.getElementById(id);
+const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const textCmp=(a,b)=>String(a??'').localeCompare(String(b??''),'en',{sensitivity:'base',numeric:true});
+const whole=n=>Number(n||0).toLocaleString('en-US');
+const maxlen=(s,n)=>String(s??'').trim().slice(0,n);
+const safeUrl=u=>{try{const v=new URL(u);return v.protocol==='https:'?v.href:''}catch(e){return ''}};
+function parseResources(input){
+ if(Array.isArray(input))return input.slice(0,25).map(x=>({amount:Math.max(0,Math.min(10000000,Math.floor(Number(x.amount)||0))),name:maxlen(x.name,90)})).filter(x=>x.amount&&x.name);
+ return String(input??'').split(/\r?\n/).slice(0,25).map(s=>s.trim()).map(s=>{
+  const match=s.match(/^(\d[\d,]*)\s*(?:\||\s)\s*(.{2,90})$/);
+  return match?{amount:+match[1].replace(/,/g,''),name:match[2].trim()}:null;
+ }).filter(x=>x&&x.amount>0);
+}
+function sanitizeMilestones(raw){
+ const completed={};const src=raw?.completedMilestones&&typeof raw.completedMilestones==='object'?raw.completedMilestones:{};
+ for(const id of Object.keys(seed.milestones))completed[id]=src[id]===true;
+ return completed;
+}
+function cleanState(raw){
+ if(!raw||!Array.isArray(raw.items))throw new Error('Backup must contain an items array');
+ if(raw.items.length>2500)throw new Error('Backup is too large');
+ const items=raw.items.map((s,i)=>{
+  const id=maxlen(s.id||`legacy-${i}`,90),s0=seedById.get(id)||{};
+  const legacySource=['Ready to buy','Artifact gear: Endwalker','Artifact gear: Dawntrail','Windurst: Third Walk','Jeuno: First Walk','Occult Crescent','Manderville relic','Resistance relic','Eureka'].includes(s.source) && s.original!==false;
+  const originalResources=s.resources!==undefined?s.resources:s0.resources;
+  const origCost=s0.cost||'';
+  const incomingCost=String(s.cost||'');
+  const cost=(!incomingCost||incomingCost.startsWith('Approx. 6,000 Mathematics')||incomingCost==='4,500 Poetics total')?origCost:incomingCost;
+  const hasNewFields=(s.version===3)||('resources' in s);
+  return {
+   id,name:maxlen(s.name,120),job:maxlen(s.job,20).toUpperCase(),slot:maxlen(s.slot||'Other',35),
+   source:maxlen(legacySource?(s0.source||s.source):(s.source||s0.source||'To verify'),120),
+   method:maxlen(s.original!==false&&s0.method?(s0.method):(s.method||s0.method),120),
+   level:Number.isInteger(Number(s.level))&&Number(s.level)>0?Number(s.level):(s0.level||null),
+   cost:maxlen(cost||s0.cost||'—',240),resources:parseResources(originalResources),
+   prerequisites:Array.isArray(s.prerequisites)?s.prerequisites.filter(x=>seed.milestones[x]):(s0.prerequisites||[]),
+   steps:Array.isArray(s.steps)?s.steps.map(x=>maxlen(x,250)).slice(0,15):(s0.steps||[]),
+   wikiUrl:safeUrl(s.wikiUrl||s0.wikiUrl),
+   notes:maxlen(s.notes??s0.notes,700),owned:s.owned===true,dyeNeeded:s.dyeNeeded===true,
+   dyeUnlocked:s.dyeUnlocked===true,original:s.original!==false,version:3
+  };
+ }).filter(x=>x.name);
+ const completedMilestones=sanitizeMilestones(raw);
+ return {version:3,items,completedMilestones};
+}
+let data;
+try{const stored=localStorage.getItem(DATA_KEY);data=stored?cleanState(JSON.parse(stored)):cleanState(seed)}catch(e){console.warn('Using example checklist',e);data=cleanState(seed)}
+function save(){try{localStorage.setItem(DATA_KEY,JSON.stringify(data))}catch(e){console.warn('Browser storage not available:',e)}}
+let prefs={layout:'master',sortField:null,sortDir:'asc'};
+try{
+ const raw=JSON.parse(localStorage.getItem(PREF_KEY)||localStorage.getItem('dusty-chronicle-wardrobe-table-v1')||'null');
+ if(raw&&typeof raw==='object'){
+  if(['master','source'].includes(raw.layout))prefs.layout=raw.layout;
+  if(['name','job','slot','level','source','method','cost','owned'].includes(raw.sortField))prefs.sortField=raw.sortField;
+  if(['asc','desc'].includes(raw.sortDir))prefs.sortDir=raw.sortDir;
+ }
+}catch(e){}
+function savePrefs(){try{localStorage.setItem(PREF_KEY,JSON.stringify(prefs))}catch(e){}}
+const isOwned=it=>it.owned===true;
+const relevantPrerequisites=()=>{
+ const used=new Set();
+ for(const it of data.items){for(const id of it.prerequisites||[]){if(!it.owned || (it.dyeNeeded&&['ew_melee','dt_melee'].includes(id)))used.add(id)}}
+ return [...used].filter(id=>seed.milestones[id]);
+};
+function outstandingResources(){
+ const map=new Map();
+ for(const it of data.items.filter(i=>!isOwned(i))){
+  for(const r of it.resources||[]){const key=r.name.toLowerCase();const row=map.get(key)||{name:r.name,amount:0,items:[]};row.amount+=r.amount;row.items.push(it.name);map.set(key,row)}
+ }
+ return [...map.values()].sort((a,b)=>textCmp(a.name,b.name));
+}
+function renderMetrics(){
+ const count=data.items.length,owned=data.items.filter(isOwned).length,quests=relevantPrerequisites().filter(id=>!data.completedMilestones[id]).length;
+ $('count-all').textContent=whole(count);$('count-owned').textContent=whole(owned);$('count-needed').textContent=whole(count-owned);$('count-quests').textContent=whole(quests);
+ const pct=count?Math.round(owned/count*100):0;$('overall-progress').setAttribute('aria-valuenow',pct);$('overall-progress').querySelector('span').style.width=pct+'%';
+}
+function renderFilters(){
+ const entries=[['source','All sources'],['job','All jobs'],['method','All methods']];
+ for(const [key,placeholder] of entries){const el=$(key),old=el.value;const opts=[...new Set(data.items.map(x=>x[key]).filter(Boolean))].sort(textCmp);el.replaceChildren(new Option(placeholder,''));opts.forEach(x=>el.add(new Option(x,x)));el.value=opts.includes(old)?old:'';}
+}
+function filteredItems(){
+ const q=$('search').value.trim().toLowerCase(),src=$('source').value,job=$('job').value,method=$('method').value,view=$('view').value;
+ return data.items.filter(it=>(!src||it.source===src)&&(!job||it.job===job)&&(!method||it.method===method)&&
+  (view==='all'||(view==='missing'&&!it.owned)||(view==='owned'&&it.owned))&&
+  (!q||[it.name,it.job,it.slot,it.level,it.source,it.method,it.cost,it.notes,...(it.resources||[]).map(x=>x.name)].join(' ').toLowerCase().includes(q)));
+}
+const captions={name:'Item',job:'Job',slot:'Slot',level:'Level',source:'Source',method:'How to obtain',cost:'Cost / Materials',owned:'Owned'};
+function sorted(list){
+ if(!prefs.sortField)return [...list];
+ const field=prefs.sortField,d=prefs.sortDir==='asc'?1:-1;
+ return [...list].sort((a,b)=>{
+  let n=0;
+  if(field==='level'){
+   const aa=a.level==null,bb=b.level==null;
+   if(aa!==bb)return aa?1:-1;
+   n=(a.level||0)-(b.level||0);
+  }else if(field==='owned')n=Number(a.owned)-Number(b.owned);
+  else if(field==='cost'){
+   const ra=a.resources?.length===1?a.resources[0]:null,rb=b.resources?.length===1?b.resources[0]:null;
+   n=textCmp(ra?.name||a.cost,rb?.name||b.cost);
+   if(n===0&&ra&&rb)n=ra.amount-rb.amount;
+  }else n=textCmp(a[field],b[field]);
+  return n*d||textCmp(a.name,b.name)||textCmp(a.id,b.id);
+ });
+}
+function header(field){
+ const active=prefs.sortField===field,dir=active?prefs.sortDir:'none';
+ return `<th aria-sort="${dir==='asc'?'ascending':dir==='desc'?'descending':'none'}"><button class="sort-head" type="button" data-sort="${field}">${captions[field]} <span class="sort-arrow">${active?(prefs.sortDir==='asc'?'↑':'↓'):'↕'}</span></button></th>`;
+}
+function buildRows(list,master){
+ return list.map(it=>{
+  const id=esc(it.id),src=master?`<td><button type="button" class="facet-source" data-source="${esc(it.source)}">${esc(it.source)}</button></td>`:'';
+  const job=it.job?`<button type="button" class="jobpill facet-job" data-job="${esc(it.job)}">${esc(it.job)}</button>`:'—';
+  const method=`<button type="button" class="facet-method" data-method="${esc(it.method)}">${esc(it.method||'—')}</button>`;
+  const detail=it.resources.length||it.prerequisites.length||it.steps.length||it.notes||it.wikiUrl;
+  const name=detail?`<button type="button" class="gear-name-link open-detail" data-id="${id}" title="View item details">${esc(it.name)} <span class="subtle-note">↗</span></button>`:`<span class="gear-name">${esc(it.name)}</span>`;
+  const cost=it.resources.length>1?`<button type="button" class="cost-link open-detail" data-id="${id}" title="See materials breakdown">${esc(it.cost)} <span aria-hidden="true">›</span></button>`:esc(it.cost||'—');
+  return `<tr class="${it.owned?'done':''}"><td>${name}${it.dyeNeeded?'<div class="table-tip">Dye unlock required</div>':''}</td><td>${job}</td><td>${esc(it.slot||'—')}</td><td>${it.level??'—'}</td>${src}<td>${method}</td><td class="cost-cell">${cost}</td><td><div class="gear-actions"><input class="check owned-check" type="checkbox" data-id="${id}" aria-label="Owned: ${esc(it.name)}" ${it.owned?'checked':''}><button class="smallbtn delete-item" type="button" data-id="${id}" aria-label="Remove ${esc(it.name)}" title="Remove item">×</button></div></td></tr>`;
+ }).join('');
+}
+function table(items,master){
+ const columns=['name','job','slot','level',...(master?['source']:[]),'method','cost','owned'];
+ return `<div class="table-scroll"><table class="gear-table ${master?'master-table':''}"><thead><tr>${columns.map(header).join('')}</tr></thead><tbody>${buildRows(items,master)}</tbody></table></div>`;
+}
+function renderGear(){
+ const shown=filteredItems(),node=$('gear-groups');node.replaceChildren();
+ $('filtered-count').textContent=`Showing ${shown.length} of ${data.items.length} pieces`;
+ $('sort-summary').textContent=prefs.sortField?`Sorted by ${captions[prefs.sortField]} (${prefs.sortDir==='asc'?'ascending':'descending'}).`:'';
+ document.querySelectorAll('.layout-option').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.layout===prefs.layout)));
+ if(!shown.length){node.innerHTML='<div class="empty">Nothing matches your filters.</div>';return}
+ if(prefs.layout==='master'){
+  const sec=document.createElement('section');sec.className='section';sec.innerHTML=`<div class="section-head"><h2>Master list</h2><span class="section-count">${shown.filter(isOwned).length} / ${shown.length} owned</span></div>${table(sorted(shown),true)}`;node.appendChild(sec);
+ }else{
+  const groups=new Map();shown.forEach(it=>{if(!groups.has(it.source))groups.set(it.source,[]);groups.get(it.source).push(it)});
+  for(const [src,list] of groups){const sec=document.createElement('section');sec.className='section';sec.innerHTML=`<div class="section-head"><h2>${esc(src)}</h2><span class="section-count">${list.filter(isOwned).length} / ${list.length} owned</span></div>${table(sorted(list),false)}`;node.appendChild(sec);}
+ }
+}
+function renderRequirements(){
+ const row=$('resource-totals'),res=outstandingResources();
+ row.innerHTML=res.length?res.map(r=>`<div class="reqitem"><span>${esc(r.name)}<div class="subtle-note">${r.items.length} item${r.items.length!==1?'s':''}</div></span><strong>${whole(r.amount)}</strong></div>`).join(''):'<div class="empty">No quantified materials required by outstanding items.</div>';
+ const pending=relevantPrerequisites(),groups=new Map();
+ for(const id of pending){const task=seed.milestones[id];if(!groups.has(task.group))groups.set(task.group,[]);groups.get(task.group).push({id,...task})}
+ const div=$('milestone-groups');div.replaceChildren();
+ if(!pending.length){div.innerHTML='<div class="empty">No outstanding prerequisite projects.</div>';return}
+ for(const [group,arr] of groups){const wrap=document.createElement('div');wrap.className='reqgroup';wrap.innerHTML=`<h3>${esc(group)}</h3>${arr.map(t=>`<div class="taskrow ${data.completedMilestones[t.id]?'done':''}"><input type="checkbox" class="milestone-check check" data-id="${esc(t.id)}" id="quest-${esc(t.id)}" ${data.completedMilestones[t.id]?'checked':''}><label for="quest-${esc(t.id)}"><strong>${esc(t.name)}</strong><small>${esc(t.detail)}</small></label></div>`).join('')}`;div.appendChild(wrap)}
+}
+function renderAll(){renderFilters();renderMetrics();renderGear();renderRequirements()}
+function itemDialog(item){
+ $('detail-name').textContent=item.name;
+ $('detail-meta').textContent=[item.job,item.slot,item.level?`Level ${item.level}`:'Level unverified'].filter(Boolean).join(' · ');
+ const prereqs=(item.prerequisites||[]).filter(id=>seed.milestones[id]);
+ let html=`<div class="source-meta"><strong>Source:</strong> ${esc(item.source)}<br><strong>Method:</strong> ${esc(item.method)}<br><strong>Cost:</strong> ${esc(item.cost||'—')}</div>`;
+ if(item.wikiUrl)html+=`<div class="dialog-links"><a href="${esc(item.wikiUrl)}" target="_blank" rel="noopener noreferrer">View source page ↗</a></div>`;
+ if(item.resources.length)html+=`<h3>Quantified requirements</h3><ul>${item.resources.map(r=>`<li>${whole(r.amount)} ${esc(r.name)}</li>`).join('')}</ul>`;
+ if(item.steps.length)html+=`<h3>Acquisition steps</h3><ol>${item.steps.map(s=>`<li>${esc(s)}</li>`).join('')}</ol>`;
+ if(prereqs.length)html+=`<h3>Shared prerequisites</h3><ul>${prereqs.map(id=>`<li>${esc(seed.milestones[id].name)} — <em>${data.completedMilestones[id]?'Completed':'Outstanding'}</em></li>`).join('')}</ul>`;
+ if(item.notes)html+=`<h3>Notes</h3><p>${esc(item.notes)}</p>`;
+ html+='<div class="dialog-footer">Check off the gear in the master list when you own it. Currency totals update automatically; intermediate materials are not tracked.</div>';
+ $('detail-content').innerHTML=html;
+ $('item-dialog').showModal();
+}
+$('close-detail').addEventListener('click',()=>$('item-dialog').close());
+$('item-dialog').addEventListener('click',e=>{if(e.target===$('item-dialog'))$('item-dialog').close()});
+$('gear-groups').addEventListener('change',e=>{
+ const input=e.target.closest('.owned-check');if(!input)return;const it=data.items.find(x=>x.id===input.dataset.id);if(!it)return;
+ it.owned=input.checked;save();renderMetrics();renderGear();renderRequirements();
+});
+$('gear-groups').addEventListener('click',e=>{
+ const head=e.target.closest('.sort-head');if(head){const field=head.dataset.sort;prefs.sortDir=prefs.sortField===field&&prefs.sortDir==='asc'?'desc':'asc';prefs.sortField=field;savePrefs();renderGear();return}
+ for(const [cls,select,key] of [['.facet-job','job','job'],['.facet-source','source','source'],['.facet-method','method','method']]){const btn=e.target.closest(cls);if(btn){$(select).value=btn.dataset[key];renderGear();return}}
+ const detail=e.target.closest('.open-detail');if(detail){const it=data.items.find(x=>x.id===detail.dataset.id);if(it)itemDialog(it);return}
+ const del=e.target.closest('.delete-item');if(del){const it=data.items.find(x=>x.id===del.dataset.id);if(it&&confirm(`Remove ${it.name} from your local ledger?`)){data.items=data.items.filter(x=>x.id!==it.id);save();renderAll()}}
+});
+$('milestone-groups').addEventListener('change',e=>{
+ const input=e.target.closest('.milestone-check');if(!input)return;data.completedMilestones[input.dataset.id]=input.checked;save();renderMetrics();renderRequirements();
+});
+for(const btn of document.querySelectorAll('.layout-option'))btn.addEventListener('click',()=>{prefs.layout=btn.dataset.layout;savePrefs();renderGear()});
+for(const id of ['search','source','job','method','view'])$(id).addEventListener(id==='search'?'input':'change',renderGear);
+for(const tab of document.querySelectorAll('.tab'))tab.addEventListener('click',()=>{
+ for(const b of document.querySelectorAll('.tab'))b.setAttribute('aria-selected',String(b===tab));
+ const gear=tab.dataset.tab==='gear';$('panel-gear').classList.toggle('hidden',!gear);$('panel-requirements').classList.toggle('hidden',gear);
+ if(!gear)renderRequirements();
+});
+$('show-add').addEventListener('click',()=>{$('add-panel').open=true;$('add-panel').scrollIntoView({behavior:'smooth',block:'start'});$('wiki-url').focus()});
+$('cancel-add').addEventListener('click',()=>{$('add-panel').open=false});
+// Wiki import: the site may permit MediaWiki cross-origin requests. If it does not,
+// we try XIVAPI for basic game-client fields and clearly distinguish incomplete results.
+function wikiTitle(url){
+ const u=new URL(url);
+ if(u.protocol!=='https:'||u.hostname!=='ffxiv.consolegameswiki.com')throw new Error('Use an https://ffxiv.consolegameswiki.com item page URL.');
+ let slug='';
+ if(u.pathname.startsWith('/wiki/'))slug=decodeURIComponent(u.pathname.slice(6));
+ else if(u.pathname.startsWith('/mediawiki/index.php'))slug=u.searchParams.get('title')||'';
+ if(!slug||slug.length>160)throw new Error('This does not look like a wiki item page URL.');
+ return slug.replace(/_/g,' ');
+}
+const getText=el=>el?el.textContent.replace(/\s+/g,' ').trim():'';
+function classifyAcquisition(out,acquisition,marketProhibited,detailsText=''){
+ const short=String(acquisition||'').trim().slice(0,850);
+ const raw=String(detailsText||'');
+ out.acquisition=short;
+ out.marketProhibited=marketProhibited;
+ // For tradeable items the user prefers the Market Board, irrespective of other drop sources.
+ if(marketProhibited===false){out.source='Market Board';out.method='Market Board';out.cost='Gil · price varies';return out}
+ if(/(?:online store|mog station)/i.test(short)){out.source='Online Store';out.method='Online Store / seasonal';out.cost='Online Store / event'}
+ else if(/(?:wolf marks|trophy crystals|wolves. den)/i.test(short)){
+  out.source="Wolves' Den Pier";out.method=/trophy crystals/i.test(short)?'Trophy Crystals vendor':'Wolf Marks vendor';
+  const c=short.match(/(\d[\d,]*)\s+(Wolf Marks|Trophy Crystals)/i);if(c)out.cost=c[1]+' '+c[2];
+ }else if(/(?:island sanctuary|seafarer.s cowries)/i.test(short)){out.source='Island Sanctuary';out.method='Cowries vendor'}
+ else if(/(?:jeuno|windurst)/i.test(short)){out.source=/windurst/i.test(short)?'Windurst: The Third Walk':'Jeuno: The First Walk';out.method='Alliance raid drop';out.cost='Raid drop'}
+ else if(/(?:occult crescent|phantom weapon)/i.test(short)){out.source='Occult Crescent';out.method='Zone / relic reward'}
+ else if(/eureka/i.test(short)){out.source='Eureka';out.method='Eureka upgrade'}
+ else if(/manderville/i.test(short)){out.source='Radz-at-Han';out.method='Manderville relic'}
+ else if(/(?:dungeon|duties|duty|raid)\b/i.test(short)||/\bDuties\s*\n\s*[^\n]+/i.test(raw)){
+  const m=raw.match(/(?:^|\n)\s*Duties\s*\n\s*([^\n]{3,100})/i);
+  out.source=m?m[1].trim():'Duty · see wiki';out.method='Duty drop';out.cost='Duty drop';
+ }else if(short){out.source='See wiki';out.method='Review acquisition';out.cost='See wiki'}
+ return out;
+}
+function wikiFieldsFromHtml(html){
+ const doc=new DOMParser().parseFromString(html,'text/html');
+ const body=doc.querySelector('.mw-parser-output')||doc.body;
+ const all=getText(body),info=body.querySelector('.infobox')||body;
+ const inf=getText(info).slice(0,2400);
+ const fields={};for(const tr of info.querySelectorAll('tr')){const label=getText(tr.querySelector('th')).toLowerCase();if(label)fields[label]=getText(tr.querySelector('td'))}
+ const slotMatch=(fields.type||'').match(/\b(Head|Body|Hands|Legs|Feet|Weapon|Facewear)\b/i)||inf.match(/\bType\s+(Head|Body|Hands|Legs|Feet|Weapon|Facewear)\b/i);
+ const levelMatch=(fields.level||'').match(/\b(\d{1,3})\b/)||inf.match(/\bLevel\s+(\d{1,3})\b/i);
+ const marketProhibited=/MARKET\s*PROHIBITED/i.test(inf)||/MARKET\s*PROHIBITED/i.test(all.slice(0,500));
+ const header=[...body.querySelectorAll('h2,h3,h4')].find(x=>/^Acquisition$/i.test(getText(x).replace(/\[edit\]/ig,'').trim()));
+ let acquisition='';if(header){let n=header.nextElementSibling;while(n&&!/^H2$/.test(n.tagName)&&acquisition.length<4000){acquisition+=' '+getText(n);n=n.nextElementSibling}}
+ const out={level:levelMatch?Number(levelMatch[1]):null,slot:slotMatch?slotMatch[1]:'',acquisition:acquisition.trim().slice(0,850)};
+ // Wiki item pages explicitly indicate MARKET PROHIBITED for non-marketable gear.
+ return classifyAcquisition(out,acquisition,marketProhibited);
+}
+function wikiFieldsFromPastedText(input){
+ const raw=String(input||'').replace(/\u00a0/g,' ').replace(/\r/g,'').slice(0,120000);
+ if(raw.trim().length<80)throw new Error('Please paste the wiki item page text (not just the URL).');
+ const levels=[...raw.matchAll(/(?:^|\n)\s*Level\s*(?:\n|:)\s*(\d{1,3})\b/gim)];
+ const level=levels.length?Number(levels[0][1]):null;
+ const slot=raw.match(/(?:^|\n)\s*Type\s*(?:\n|:)\s*(Head|Body|Hands|Legs|Feet|Weapon|Facewear)\b/i)?.[1]||'';
+ const prohibited=/(?:MARKET\s*PROHIBITED|UNTRADABLE)/i.test(raw.slice(0,5000));
+ // Line-based section detection avoids matching incidental mentions of "acquisition".
+ const start=raw.search(/(?:^|\n)\s*Acquisition\s*(?:\n|$)/im);
+ const acquisition=start>=0?raw.slice(start).split(/(?:\n)\s*(?:Used For|Gallery|External Links|References|Categories|Notes)\s*(?:\n|$)/i)[0].slice(0,4000):'';
+ const out={level,slot};return classifyAcquisition(out,acquisition,prohibited,acquisition);
+}
+async function fetchJson(url){const ctrl=new AbortController(),tm=setTimeout(()=>ctrl.abort(),8500);try{const res=await fetch(url,{signal:ctrl.signal,mode:'cors',credentials:'omit'});if(!res.ok)throw new Error(`HTTP ${res.status}`);return await res.json()}finally{clearTimeout(tm)}}
+async function fromWiki(page){
+ const api=new URL('https://ffxiv.consolegameswiki.com/mediawiki/api.php');
+ for(const [k,v] of Object.entries({action:'parse',format:'json',formatversion:'2',prop:'text',page,origin:'*'}))api.searchParams.set(k,v);
+ const response=await fetchJson(api.href);if(response.error)throw new Error(response.error.info||'Wiki returned an error');
+ const payload=response.parse?.text;
+ if(typeof payload!=='string')throw new Error('Wiki did not return page HTML');
+ return {name:response.parse?.title||page,...wikiFieldsFromHtml(payload)};
+}
+async function fromXIVAPI(name){
+ const url=new URL('https://v2.xivapi.com/api/search');url.searchParams.set('sheets','Item');url.searchParams.set('fields','Name');url.searchParams.set('query',`Name="${name.replace(/["\\]/g,'')}"`);url.searchParams.set('limit','10');
+ const result=await fetchJson(url.href);const hits=result.results||[];
+ const exact=hits.find(x=>String(x.fields?.Name||'').toLowerCase()===name.toLowerCase());
+ if(!exact)throw new Error('No exact matching item in XIVAPI');
+ const detailUrl=`https://v2.xivapi.com/api/sheet/Item/${exact.row_id}?fields=${encodeURIComponent('Name,LevelEquip,IsUntradable,ItemUICategory.Name')}`;
+ const detail=await fetchJson(detailUrl);const fields=detail.fields||{};
+ const category=fields.ItemUICategory?.fields?.Name||'';
+ const slot=/\b(head|body|hands|legs|feet|weapon|facewear)\b/i.exec(category)?.[1]||'';
+ const tradeFlag=fields.IsUntradable;
+ const tradable=tradeFlag===false||tradeFlag===0;
+ return {name:fields.Name||name,level:Number.isInteger(fields.LevelEquip)?fields.LevelEquip:null,slot,
+  ...(tradable?{source:'Market Board',method:'Market Board',cost:'Gil · price varies'}:{})};
+}
+function status(msg,type=''){$('wiki-status').className='status-message '+type;$('wiki-status').textContent=msg}
+function applyWikiImport(item,sourceUrl){
+ const form=$('add-form').elements;
+ if(item.name)form.name.value=item.name;
+ if(item.slot){const options=[...form.slot.options];const match=options.find(x=>x.value.toLowerCase()===String(item.slot).toLowerCase());if(match)form.slot.value=match.value}
+ if(item.level)form.level.value=item.level;
+ if(sourceUrl)form.wikiUrl.value=sourceUrl;
+ if(item.source)form.source.value=item.source;
+ if(item.method)form.method.value=item.method;
+ if(item.cost)form.cost.value=item.cost;
+ if(item.acquisition)form.notes.value=`Wiki acquisition: ${item.acquisition}`.slice(0,700);
+}
+$('fetch-wiki').addEventListener('click',async()=>{
+ const value=$('wiki-url').value.trim();let name;
+ try{name=wikiTitle(value)}catch(e){status(e.message,'warn');return}
+ const btn=$('fetch-wiki');btn.disabled=true;btn.textContent='Fetching…';status('Checking the wiki and game item database…');
+ let item={name},wikiOk=false,xivOk=false,errors=[];
+ try{item={...item,...await fromWiki(name)};wikiOk=true}catch(err){console.warn('Wiki import not available:',err);errors.push('wiki: '+err.message)}
+ if(!wikiOk||!item.level||!item.slot){try{const f=await fromXIVAPI(name);xivOk=true;item={...f,...item,level:item.level||f.level,slot:item.slot||f.slot,source:item.source||f.source,method:item.method||f.method,cost:item.cost||f.cost}}catch(err){console.warn('XIVAPI fallback unavailable:',err);errors.push('game data: '+err.message)}}
+ applyWikiImport(item,value);
+ if(wikiOk){status('Wiki details loaded. Check the acquisition options and choose your job before adding.','success')}
+ else if(xivOk){status('Basic game data loaded, but the wiki could not be fetched directly. To import acquisition details, open “Paste the page text instead” below.','warn')}
+ else{status('The wiki and item database could not be reached. To fill the acquisition information, paste the wiki page text below.','warn')}
+ btn.disabled=false;btn.textContent='Fetch details';
+});
+$('parse-wiki-paste').addEventListener('click',()=>{
+ try{
+  const url=$('wiki-url').value.trim();const name=url?wikiTitle(url):$('add-form').elements.name.value.trim();
+  const item=wikiFieldsFromPastedText($('wiki-paste').value);
+  applyWikiImport({...item,name},url);
+  if(item.acquisition){status('Imported details from copied wiki text. Review the fields, especially costs and alternate acquisition methods.','success')}
+  else{status('Item basics found, but the copied text did not include an Acquisition section. Please review Source and Method.','warn')}
+ }catch(err){status(err.message,'warn')}
+});
+$('add-form').addEventListener('submit',e=>{
+ e.preventDefault();const f=e.target.elements;
+ const name=maxlen(f.name.value,120),source=maxlen(f.source.value,120);if(!name||!source)return;
+ const existing=data.items.find(it=>it.name.toLowerCase()===name.toLowerCase()&&it.job===f.job.value.trim().toUpperCase());
+ if(existing&&!confirm(`${name} is already in this glamour list. Add another entry anyway?`))return;
+ const resources=parseResources(f.resources.value);
+ const item={id:'custom-'+Date.now()+'-'+Math.random().toString(36).slice(2,7),name,source,job:maxlen(f.job.value,20).toUpperCase(),slot:f.slot.value,level:f.level.value?+f.level.value:null,method:maxlen(f.method.value,120),cost:maxlen(f.cost.value||'—',240),resources,prerequisites:[],steps:[],wikiUrl:safeUrl(f.wikiUrl.value),notes:maxlen(f.notes.value,700),owned:false,dyeNeeded:f.dyeNeeded.checked,dyeUnlocked:false,original:false,version:3};
+ data.items.push(item);save();e.target.reset();$('wiki-url').value='';status('');$('add-panel').open=false;
+ $('search').value='';$('source').value='';$('job').value='';$('method').value='';$('view').value='all';renderAll();
+});
+$('export').addEventListener('click',()=>{
+ const body=JSON.stringify({...data,exportedAt:new Date().toISOString()},null,2),blob=new Blob([body],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='dusty-chronicle-wardrobe-backup-v03.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),3000)
+});
+$('import').addEventListener('click',()=>$('import-file').click());
+$('import-file').addEventListener('change',async e=>{const file=e.target.files?.[0];if(!file)return;try{const incoming=cleanState(JSON.parse(await file.text()));if(confirm(`Replace your local ledger with ${incoming.items.length} pieces from this backup?`)){data=incoming;save();renderAll()}}catch(err){alert('Could not read backup: '+err.message)}finally{e.target.value=''}});
+$('blank').addEventListener('click',()=>{if(confirm('Start a blank ledger? Export your current data first if you wish to keep it.')){data={version:3,items:[],completedMilestones:{}};save();renderAll()}});
+$('reset').addEventListener('click',()=>{if(confirm('Restore the original sample and reset local progress?')){data=cleanState(seed);save();renderAll()}});
+renderAll();
+</script>
+</body>
+</html>
