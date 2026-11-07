@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#10141c">
+<title>Blue Magic Spellbook · Dusty Chronicle</title>
+<style>
+:root{--bg:#10141c;--panel:#191f2b;--raised:#222b39;--border:#323d4e;--gold:#d5bb83;--text:#f0ecdf;--muted:#b0b7c5;--blue:#9dbdda;--sage:#9cc7a9}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(ellipse at 52% -230px,#344563 0,transparent 49%),var(--bg);color:var(--text);font:15px/1.5 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+a{color:var(--gold)}
+button,input,select{font:inherit}button,select{cursor:pointer}
+button{color:var(--text);background:var(--raised);border:1px solid var(--border);border-radius:9px;padding:9px 12px}
+button:hover{border-color:var(--gold)}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.shell{max-width:1090px;margin:0 auto;padding:28px clamp(18px,4vw,38px) 60px}
+.top{display:flex;justify-content:space-between;gap:18px;align-items:center;border-bottom:1px solid var(--border);padding-bottom:20px}
+.brand{text-transform:uppercase;letter-spacing:.18em;color:var(--gold);font-size:12px;font-weight:750;text-decoration:none}
+.nav{display:flex;flex-wrap:wrap;gap:16px;font-size:13px}
+.nav a{color:var(--muted);text-decoration:none}.nav a:hover{color:var(--gold)}
+.hero{display:flex;align-items:center;gap:24px;padding:37px 0 22px}
+.hero-content{flex:1;min-width:0}.eyebrow{text-transform:uppercase;letter-spacing:.17em;color:var(--gold);font-size:11px;font-weight:750}
+h1{font:400 clamp(33px,5vw,52px)/1.15 Georgia,serif;letter-spacing:-.02em;margin:8px 0}
+.hero p{color:var(--muted);margin:0}.sigil{flex:0 0 83px;height:83px;border-radius:22px;display:grid;place-items:center;border:1px solid #60728d;background:linear-gradient(135deg,#293e62,#141d30);color:#c8d8f0;font:400 30px Georgia,serif;letter-spacing:-.08em;box-shadow:inset 0 0 25px #47648a35}
+.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:8px}
+.metric{padding:17px 18px;border:1px solid var(--border);border-radius:14px;background:linear-gradient(150deg,var(--panel),#161b25)}
+.metric .number{font-size:30px;font-weight:650;letter-spacing:-.05em;line-height:1.2;font-variant-numeric:tabular-nums}.metric .label{color:var(--muted);font-size:12px;margin-top:3px}
+.progress{margin:18px 0 10px;height:9px;border-radius:99px;background:#30384a;overflow:hidden}
+.progress>span{display:block;height:100%;background:linear-gradient(90deg,#799ec3,#b1d3cf);width:0;transition:width .2s}
+.progress-label{color:var(--muted);font-size:12px;display:flex;justify-content:space-between;gap:8px}
+.focus{display:flex;gap:12px;align-items:flex-start;margin:23px 0 25px;padding:14px 16px;background:#1b2836;border:1px solid #35475d;border-radius:12px}
+.focus .dot{width:8px;height:8px;border-radius:50%;background:var(--blue);flex-shrink:0;margin-top:7px}
+.focus strong{color:#d2e0ef}.focus .small{display:block;font-size:12px;color:var(--muted);margin-top:2px}
+.toolbar{display:flex;align-items:flex-end;gap:12px;flex-wrap:wrap;padding:0 0 16px}
+.toolbar .field{display:block;color:var(--muted);font-size:12px}.field span{display:block;margin-bottom:5px}
+input[type=search],select{color:var(--text);background:#151b26;border:1px solid var(--border);border-radius:9px;padding:10px 12px;min-height:42px}
+input[type=search]{width:100%;min-width:220px}.search-field{flex:1;min-width:220px}.status-field{min-width:135px}.status-field select{width:100%}
+.categories{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:19px}
+.filter{background:transparent;color:var(--muted);font-size:13px;padding:7px 12px}
+.filter[aria-pressed="true"]{color:var(--gold);border-color:#776b50;background:#2b2c30}
+.filter-count{font-size:11px;margin-left:4px;opacity:.75}
+.group{border:1px solid var(--border);background:var(--panel);border-radius:15px;overflow:hidden;margin:15px 0}
+.group-heading{display:flex;justify-content:space-between;align-items:center;gap:15px;padding:13px 18px;background:#202836;border-bottom:1px solid var(--border)}
+.group-heading h2{margin:0;font-size:16px;font-weight:650}.group-count{font-size:12px;color:var(--gold);font-variant-numeric:tabular-nums}
+.spell{display:grid;grid-template-columns:52px minmax(180px,.9fr) minmax(220px,1.15fr) 110px;gap:13px;align-items:center;padding:15px 18px;border-top:1px solid var(--border)}
+.group-heading+.spell{border-top:0}.spell:hover{background:#222b37}
+.index{border:1px solid #3f5065;background:#171e29;border-radius:7px;color:var(--blue);text-align:center;padding:5px 2px;font-size:12px;font-weight:700;white-space:nowrap}
+.spell-name{font-weight:650;text-decoration:none;color:var(--text)}.spell-name:hover{color:var(--gold);text-decoration:underline;text-underline-offset:3px}
+.source{font-size:13px}.target{color:var(--muted);font-size:12px;margin-top:2px}
+.note{font-size:11px;color:#b3bfce;margin-top:4px}
+.learned-flag{display:inline-flex;gap:8px;align-items:center;justify-content:flex-end;font-size:12px;color:var(--muted);cursor:pointer;white-space:nowrap}
+.learned-flag input{width:19px;height:19px;accent-color:#90bca0;cursor:pointer;margin:0}
+.spell.is-learned .spell-name{text-decoration:line-through;text-decoration-thickness:1px;color:#a1b3a8}
+.spell.is-learned .index{color:var(--sage);border-color:#4b7058}
+.empty{padding:36px;text-align:center;color:var(--muted);border:1px dashed var(--border);border-radius:14px}
+details{border:1px solid var(--border);border-radius:13px;background:#161d28;padding:13px 17px;margin-top:28px}
+summary{cursor:pointer;color:var(--gold);font-weight:650}
+.backup-copy{font-size:13px;color:var(--muted);margin:11px 0 12px}.backup-actions{display:flex;flex-wrap:wrap;gap:9px}
+.danger{color:#e3aaaa}.fineprint{font-size:12px;color:var(--muted);margin-top:13px}
+.footer{margin-top:34px;padding-top:18px;border-top:1px solid var(--border);font-size:12px;color:var(--muted);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.footer a{text-decoration:none}.footer a:hover{text-decoration:underline}
+@media(max-width:790px){.spell{grid-template-columns:43px minmax(0,1fr) 100px;gap:11px}.source-wrap{grid-column:2;grid-row:2}.learned-flag{grid-column:3;grid-row:1 / span 2}.index{align-self:start}.metrics{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:510px){.hero{padding-top:28px}.sigil{display:none}.metric{padding:13px}.metric .number{font-size:27px}.spell{padding:13px 12px;grid-template-columns:39px minmax(0,1fr) 25px}.learned-flag{grid-column:3}.learned-flag span{display:none}.group-heading{padding:12px}.nav{gap:10px}.search-field{flex-basis:100%}.status-field{flex:1}}
+</style>
+</head>
+<body>
+<div class="shell">
+ <header class="top">
+  <a class="brand" href="index.html">Dusty Chronicle</a>
+  <nav class="nav" aria-label="Site navigation"><a href="index.html">Home</a><a href="wardrobe.html">Wardrobe Ledger</a></nav>
+ </header>
+ <main>
+  <section class="hero">
+   <div class="hero-content"><div class="eyebrow">Final Fantasy XIV / Level 80</div><h1>Blue Magic Spellbook</h1><p>Personal spell acquisition tracker</p></div>
+   <div class="sigil" aria-hidden="true">BLU</div>
+  </section>
+  <section class="metrics" aria-label="Spell progress">
+   <div class="metric"><div class="number" id="learned-total">102</div><div class="label">Spells learned</div></div>
+   <div class="metric"><div class="number" id="missing-total">22</div><div class="label">Remaining</div></div>
+   <div class="metric"><div class="number" id="percent">82%</div><div class="label">Spellbook complete</div></div>
+   <div class="metric"><div class="number" id="totem-distance">18</div><div class="label" id="totem-label">Until Force Field unlock</div></div>
+  </section>
+  <div class="progress" role="progressbar" aria-label="Total spells learned" aria-valuemin="0" aria-valuemax="124" aria-valuenow="102" id="progress"><span></span></div>
+  <div class="progress-label"><span id="progress-copy">102 of 124 spells</span><span>Blue Mage · cap 80</span></div>
+  <div class="focus" id="focus" aria-live="polite"></div>
+  <div class="toolbar">
+   <label class="field search-field"><span>Search spells or duties</span><input id="search" type="search" placeholder="Spell, enemy, duty..." autocomplete="off"></label>
+   <label class="field status-field"><span>Display</span><select id="status"><option value="all">All spells</option><option value="missing">Remaining only</option><option value="learned">Learned only</option></select></label>
+  </div>
+  <nav class="categories" aria-label="Spell categories" id="categories"></nav>
+  <div id="spell-groups" aria-live="polite"></div>
+  <details>
+   <summary>Backup &amp; restore</summary>
+   <p class="backup-copy">Your checkmarks are saved in this browser. Export a backup to move your progress to another browser or device.</p>
+   <div class="backup-actions"><button id="export" type="button">Export progress</button><button id="import" type="button">Import progress</button><button id="reset" type="button" class="danger">Reset checkmarks</button><input id="import-file" type="file" accept=".json,application/json" hidden></div>
+   <div class="fineprint" id="backup-message" role="status"></div>
+  </details>
+ </main>
+ <footer class="footer"><span>Dusty Chronicle · Blue Magic</span><a href="https://ffxiv.consolegameswiki.com/wiki/Blue_Magic_Spellbook" target="_blank" rel="noopener noreferrer">Spell source reference</a></footer>
+</div>
+<script id="spell-data" type="application/json">[{"number":27,"name":"The Look","category":"Dungeon","source":"Amdapor Keep","target":"Anantaboga","note":"Alternative: Bibliolater · The Great Gubal Library (Hard)"},{"number":37,"name":"Ink Jet","category":"Dungeon","source":"Sastasha (Hard)","target":"Kraken","note":""},{"number":61,"name":"Avail","category":"Dungeon","source":"Saint Mocianne’s Arboretum","target":"Queen Hawk","note":""},{"number":70,"name":"Cactguard","category":"Dungeon","source":"The Sunken Temple of Qarn (Hard)","target":"Sabotender Guardia","note":""},{"number":83,"name":"Tatami-gaeshi","category":"Dungeon","source":"Kugane Castle","target":"Dojun-maru","note":""},{"number":84,"name":"Cold Fog","category":"Dungeon","source":"The Burn","target":"Mist Dragon","note":""},{"number":87,"name":"Feculent Flood","category":"Dungeon","source":"Saint Mocianne’s Arboretum (Hard)","target":"Tokkapchi","note":""},{"number":98,"name":"Malediction of Water","category":"Dungeon","source":"The Swallow’s Compass","target":"Sai Taisui","note":""},{"number":102,"name":"Both Ends","category":"Dungeon","source":"The Swallow’s Compass","target":"Qitian Dasheng","note":""},{"number":110,"name":"Wild Rage","category":"Dungeon","source":"The Heroes’ Gauntlet","target":"Spectral Berserker","note":""},{"number":116,"name":"Conviction Marcato","category":"Dungeon","source":"Mt. Gulg","target":"Forgiven Obscenity","note":""},{"number":121,"name":"Mortal Flame","category":"Dungeon","source":"The Grand Cosmos","target":"Lugus","note":"Next dungeon target from our last plan"},{"number":46,"name":"Mountain Buster","category":"Trial","source":"The Navel (Hard)","target":"Titan","note":""},{"number":49,"name":"Veil of the Whorl","category":"Trial","source":"The Whorleater (Hard)","target":"Leviathan","note":""},{"number":79,"name":"Quasar","category":"Trial","source":"Containment Bay P1T6","target":"Sophia","note":""},{"number":85,"name":"Stotram","category":"Trial","source":"Emanation","target":"Lakshmi","note":""},{"number":54,"name":"Kaltstrahl","category":"Raid","source":"Alexander — The Fist of the Father (A1)","target":"Faust / Sturm Doll","note":""},{"number":69,"name":"Perpetual Ray","category":"Raid","source":"Alexander — The Burden of the Father (A4)","target":"The Manipulator","note":""},{"number":86,"name":"Saintly Beam","category":"Raid","source":"Sigmascape V1.0","target":"Phantom Train","note":""},{"number":93,"name":"Blaze","category":"Raid","source":"Deltascape V1.0","target":"Alte Roite","note":""},{"number":119,"name":"Laser Eye","category":"Raid","source":"Eden’s Promise: Eternity (E12)","target":"Eden’s Promise","note":""},{"number":117,"name":"Force Field","category":"Totem","source":"Whalaqee Totem","target":"Wayward Gaheel Ja · Ul’dah — Steps of Thal","note":"Unlock after learning 120 Blue Magic spells; alternatively Sephirot (Extreme)"}]</script>
+<script>
+'use strict';
+const SPELLS=JSON.parse(document.getElementById('spell-data').textContent);
+const BASE_LEARNED=102,TOTAL=124,STORE='dusty-chronicle-blu-spells-v1';
+const CATEGORIES=['Dungeon','Trial','Raid','Totem'];
+const known=new Set(SPELLS.map(s=>s.number));
+const $=id=>document.getElementById(id);
+const escapeHTML=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function load(){try{const p=JSON.parse(localStorage.getItem(STORE));return new Set(Array.isArray(p?.learned)?p.learned.filter(n=>Number.isInteger(n)&&known.has(n)):[])}catch(e){return new Set()}}
+let learned=load(),category='All';
+function save(){try{localStorage.setItem(STORE,JSON.stringify({version:1,learned:[...learned].sort((a,b)=>a-b)}))}catch(e){$('backup-message').textContent='Could not save browser progress. Use an export backup.'}}
+const spellURL=s=>'https://ffxiv.consolegameswiki.com/wiki/'+encodeURIComponent(s.name.replaceAll(' ','_'));
+function renderMetrics(){
+ const count=BASE_LEARNED+learned.size,remaining=TOTAL-count;
+ $('learned-total').textContent=count;$('missing-total').textContent=remaining;
+ $('percent').textContent=Math.round(count/TOTAL*100)+'%';
+ $('progress-copy').textContent=count+' of '+TOTAL+' spells';
+ $('progress').setAttribute('aria-valuenow',count);
+ $('progress').querySelector('span').style.width=(count/TOTAL*100)+'%';
+ const forceFieldLearned=learned.has(117),needed=Math.max(0,120-count);
+ $('totem-distance').textContent=forceFieldLearned?'✓':needed===0?'Ready':needed;
+ $('totem-label').textContent=forceFieldLearned?'Force Field learned':needed===0?'Force Field totem unlocked':'Until Force Field unlock';
+ const remainingSpells=SPELLS.filter(s=>!learned.has(s.number));
+ const suggested=remainingSpells.find(s=>s.number===121)||remainingSpells.find(s=>s.category==='Dungeon')||remainingSpells[0];
+ $('focus').innerHTML=suggested
+  ?'<span class="dot" aria-hidden="true"></span><div><strong>Next target: #'+suggested.number+' '+escapeHTML(suggested.name)+'</strong><span class="small">'+escapeHTML(suggested.source)+' · '+escapeHTML(suggested.target)+'</span></div>'
+  :'<span class="dot" aria-hidden="true"></span><div><strong>Spellbook complete</strong><span class="small">All 124 Blue Magic spells learned.</span></div>';
+}
+function renderCategories(){
+ const totals={All:SPELLS.length};for(const c of CATEGORIES)totals[c]=SPELLS.filter(s=>s.category===c).length;
+ $('categories').innerHTML=['All',...CATEGORIES].map(c=>'<button type="button" class="filter" data-cat="'+c+'" aria-pressed="'+(category===c)+'">'+(c==='All'?'All':c==='Totem'?'Totem':c+'s')+'<span class="filter-count">'+totals[c]+'</span></button>').join('');
+ $('categories').querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{category=b.dataset.cat;render()}));
+}
+function renderList(){
+ const term=$('search').value.toLocaleLowerCase().trim(),status=$('status').value;
+ const matching=SPELLS.filter(s=>(category==='All'||s.category===category)&&
+  (status==='all'||(status==='learned'&&learned.has(s.number))||(status==='missing'&&!learned.has(s.number)))&&
+  (!term||[s.number,s.name,s.category,s.source,s.target,s.note].join(' ').toLocaleLowerCase().includes(term)));
+ let out='';for(const c of CATEGORIES){const found=matching.filter(s=>s.category===c);if(!found.length)continue;
+  const unfinished=found.filter(s=>!learned.has(s.number)).length;
+  out+='<section class="group"><div class="group-heading"><h2>'+c+(c==='Totem'?'':'s')+'</h2><span class="group-count">'+unfinished+' remaining / '+found.length+' shown</span></div>';
+  for(const s of found){const done=learned.has(s.number);
+   out+='<div class="spell'+(done?' is-learned':'')+'"><div class="index">#'+s.number+'</div><div><a class="spell-name" href="'+spellURL(s)+'" target="_blank" rel="noopener noreferrer">'+escapeHTML(s.name)+'</a></div><div class="source-wrap"><div class="source">'+escapeHTML(s.source)+'</div><div class="target">'+escapeHTML(s.target)+'</div>'+(s.note?'<div class="note">'+escapeHTML(s.note)+'</div>':'')+'</div><label class="learned-flag"><span>Learned</span><input type="checkbox" data-number="'+s.number+'" aria-label="Learned '+escapeHTML(s.name)+'" '+(done?'checked':'')+'></label></div>';
+  }out+='</section>';
+ }
+ $('spell-groups').innerHTML=out||'<div class="empty">No spells match these filters.</div>';
+ $('spell-groups').querySelectorAll('input[type=checkbox]').forEach(el=>el.addEventListener('change',()=>{
+  const n=Number(el.dataset.number);if(el.checked)learned.add(n);else learned.delete(n);save();render();
+ }));
+}
+function render(){renderMetrics();renderCategories();renderList()}
+$('search').addEventListener('input',renderList);$('status').addEventListener('change',renderList);
+$('export').addEventListener('click',()=>{
+ const txt=JSON.stringify({app:'dusty-chronicle-blu',version:1,learned:[...learned].sort((a,b)=>a-b)},null,2);
+ const object=URL.createObjectURL(new Blob([txt],{type:'application/json'}));const a=document.createElement('a');a.href=object;a.download='blu-spell-progress.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(object),2000);
+ $('backup-message').textContent='Progress backup exported.';
+});
+$('import').addEventListener('click',()=>$('import-file').click());
+$('import-file').addEventListener('change',async event=>{
+ const file=event.target.files[0];if(!file)return;
+ try{const o=JSON.parse(await file.text());if(o.app!=='dusty-chronicle-blu'||!Array.isArray(o.learned)||o.learned.some(n=>!Number.isInteger(n)||!known.has(n)))throw new Error('Invalid BLU backup');
+ learned=new Set(o.learned);save();render();$('backup-message').textContent='Progress restored from backup.';
+ }catch(e){$('backup-message').textContent='Import failed: please choose a valid BLU progress backup.'}event.target.value='';
+});
+$('reset').addEventListener('click',()=>{if(!confirm('Reset all checkmarks for the 22 spells in this tracker?'))return;learned.clear();save();render();$('backup-message').textContent='Checkmarks reset to the November 5 checkpoint (102 / 124).'});
+render();
+</script>
+</body>
+</html>
